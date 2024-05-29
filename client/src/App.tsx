@@ -2,14 +2,17 @@ import { useContext } from 'react'
 import './App.css'
 import SocketContext from './contexts/Socket/Context'
 
-function App() {
+export interface IAppProps {}
 
-  const {socket, uuid, users} = useContext(SocketContext).SocketState
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const  App : React.FunctionComponent<IAppProps> = (props) => {
+
+  const {socket, uid, users} = useContext(SocketContext).SocketState
   return (
     <>
       <h2>Scoket IO info</h2>
       <p>
-        Your user ID : <strong> {uuid}</strong> <br />
+        Your user ID : <strong> {uid}</strong> <br />
         Users online : <strong> {users.length}</strong> <br />
         Socket ID : <strong> {socket?.id} </strong> <br />
       </p>

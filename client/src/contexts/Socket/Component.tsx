@@ -11,7 +11,7 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
 
     const socket = useSocket('ws://localhost:8000', {
         reconnectionAttempts : 5,
-        reconnectionDelay : 50000,
+        reconnectionDelay : 5000,
         autoConnect : false
     });
 
@@ -26,6 +26,7 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
         StartListeners();
         // Send the hanshks
         SendHanshake();
+        //
     },[]);
 
     const StartListeners = () => {
@@ -56,15 +57,16 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
     const SendHanshake = () => {
         console.info('Sending handshake to server ...');
 
-        socket.emit('hanshake', (uid : string, users: string[]) => {
+        socket.emit('handshake', (uid : string, users: string[]) => {
             console.log('User handshake callback message');
 
-            SocketDispatch({type : 'update_uuid', payload : uid});
+            SocketDispatch({type : 'update_uid', payload : uid});
             SocketDispatch({type : 'update_users' , payload : users});
 
             setLoading(false);
         });
     }; 
+
     if (loading) return <p> Loading Socket IO .</p>
 
     return (

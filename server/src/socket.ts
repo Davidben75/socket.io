@@ -1,7 +1,6 @@
 import {Server as HTTPServer} from 'http';
 import { Socket, Server } from 'socket.io';
 import { v4 } from 'uuid';
-import { runInThisContext } from 'vm';
 
 export class ServerSocket {
     //  This means there will be only one instance of this class shared across the application
@@ -9,8 +8,7 @@ export class ServerSocket {
     public io : Server;
 
     // Master list of all connected users
-
-    public users: {[uuid : string] : string}
+    public users: {[uid : string] : string}
 
     constructor(server : HTTPServer){
         ServerSocket.instance = this;
@@ -95,7 +93,7 @@ export class ServerSocket {
     * @ param payload any information 
     */
     SendMessage = (name : string, users : string[], payload? : Object) => {
-        console.info(`Emmiting event ${name} to ${users}`)
+        console.info(`Emmiting event ${name} to`, users) 
 
         users.forEach(id => payload ? this.io.to(id).emit(name, payload) : this.io.to(id).emit(name))
     }
