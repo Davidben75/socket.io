@@ -24,7 +24,7 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
 
         // Start the event listneter
         StartListeners();
-        // Send the hanshks
+        // Send the handshakes
         SendHanshake();
         //
     },[]);
@@ -51,6 +51,16 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
             console.info('Reconnect failure');
             alert('Unable to connect you the web socket')
         });
+
+        socket.on('user_connected', (users: string[]) => {
+            console.info('User connected, updating users list');
+            SocketDispatch({ type: 'update_users', payload: users });
+        });
+
+        socket.on('user_disconnected', (uid: string) => {
+            console.info('User disconnected:', uid);
+            SocketDispatch({ type: 'update_users', payload: uid });
+        });
     };
 
 
@@ -58,7 +68,7 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
         console.info('Sending handshake to server ...');
 
         socket.emit('handshake', (uid : string, users: string[]) => {
-            console.log('User handshake callback message');
+
 
             SocketDispatch({type : 'update_uid', payload : uid});
             SocketDispatch({type : 'update_users' , payload : users});
