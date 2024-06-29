@@ -1,23 +1,17 @@
-import { useContext } from 'react'
-import './App.css'
-import SocketContext from './contexts/Socket/Context'
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import Login from "./pages/Login";
+import ChatApp from "./pages/ChatApp";
 
-export interface IAppProps {}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const  App : React.FunctionComponent<IAppProps> = (props) => {
-
-  const {socket, uid, users} = useContext(SocketContext).SocketState
+const App: React.FC = () => {
   return (
-    <>
-      <h2>Scoket IO info</h2>
-      <p>
-        Your user ID : <strong> {uid}</strong> <br />
-        Users online : <strong> {users.length}</strong> <br />
-        Socket ID : <strong> {socket?.id} </strong> <br />
-      </p>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/application" element={<ChatApp />} />
+      </Routes>
+    </Router>
   )
 }
 
-export default App
+export default App;
