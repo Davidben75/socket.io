@@ -40,7 +40,7 @@ export class ServerSocket {
             const reconnected = Object.values(this.users).includes(socket.id);
 
             if (reconnected) {
-                console.info('This user has reconnected');
+                console.info('This user has reconnected', socket.id);
                 const uid = this.GetUidFromSocketId(socket.id);
                 const users = Object.values(this.users)
 
@@ -82,6 +82,15 @@ export class ServerSocket {
                     )
             }
         });
+
+        socket.on('send_message' , (data, callback) => {
+            console.log(`Message from ${socket.id} : ${data}`)
+            console.log(data)
+            callback({
+                detail : data,
+                message : 'Bien vu'
+            })
+        })
     };
 
     GetUidFromSocketId = (id : string) => Object.keys(this.users).find((uid) => this.users[uid] == id);

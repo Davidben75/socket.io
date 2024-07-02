@@ -1,37 +1,55 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useContext, useState } from 'react';
 import Message from '../models/message';
+import SocketContext from '../contexts/Socket/Context';
 
-const TextBar = () => {
-    const [messageSent, setMessageSent] =  useState<Message>({
-        id : '',
-        content : '',
-        created : new Date
+interface TextBarProps {
+  uid: string;
+}
+
+const TextBar: React.FC<TextBarProps> = ({ uid }) => {
+    const [messageSent, setMessageSent] = useState<Message>({
+        id: uid,
+        content: '',
+        created: null
     });
 
-    const handleChange = (e : ChangeEvent<HTMLInputElement>) => {  
-        if(e.target.name = 'message'){
+    const {SendMessage} = useContext(SocketContext)
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.name === 'message') {
             setMessageSent(prev => ({
                 ...prev,
-                content : e.target.value
+                content: e.target.value,
+                created: new Date()
             }));
-        }  
+        }
+    }
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log(messageSent);
+
+
+        SendMessage(messageSent);
+        setMessageSent(prev => ({
+            ...prev,
+            content: '',
+            created: new Date()
+        }));
+
         
     }
 
-    const handleSubmit = (e : React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log(messageSent);
-    }
-
     return (
-        <form method='POST' onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
             <input 
                 type="text" 
-                name='message'
+                name="message"
                 onChange={handleChange}
                 value={messageSent.content}
-                />
-            <button type='submit'> Send</button>
+                placeholder="Type a message..."
+            />
+            <button type="submit">Send</button>
         </form>
     );
 };

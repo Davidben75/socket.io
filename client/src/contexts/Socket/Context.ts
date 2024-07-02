@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import { Socket } from "socket.io-client";
+import Message from "../../models/message";
 
 export interface ISocketContextState {
     socket : Socket | undefined;
@@ -43,11 +44,13 @@ export const SocketReducer = (state : ISocketContextState, action : ISocketConte
 export interface ISocketContextProps {
     SocketState : ISocketContextState;
     SocketDispatch : React.Dispatch<ISocketContextActions>
+    SendMessage : (data : Message) => void
 }
 
 const SocketContext = createContext<ISocketContextProps>({
     SocketState : defaultSocketContextState,
-    SocketDispatch : () => {}
+    SocketDispatch : () => {},
+    SendMessage : () => {} 
 });
 
 export const SocketContextConsumer = SocketContext.Consumer;

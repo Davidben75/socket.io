@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, useEffect, useReducer, useState } from 'react';
 import { SocketContextProvider, SocketReducer, defaultSocketContextState } from './Context';
 import { useSocket } from '../../hooks/useSockets';
+import Message from '../../models/message';
 
 export interface ISocketContextComponentProps extends PropsWithChildren  {}
 const SocketContextComponent: React.FunctionComponent<ISocketContextComponentProps> = (props) => {
@@ -63,6 +64,13 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
         });
     };
 
+    const SendMessage = (data : Message)  => {
+        console.log('Send message to an other user');
+        socket.emit('send_message', data, (response : any ) => {
+            console.log(response)
+        })
+    }
+
 
     const SendHanshake = () => {
         console.info('Sending handshake to server ...');
@@ -80,7 +88,7 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
     if (loading) return <p> Loading Socket IO .</p>
 
     return (
-     <SocketContextProvider value={{SocketState, SocketDispatch}}> 
+     <SocketContextProvider value={{SocketState, SocketDispatch, SendMessage}}> 
         {children}
      </SocketContextProvider>  
     );

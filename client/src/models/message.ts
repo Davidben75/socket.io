@@ -1,7 +1,7 @@
 export default class Message {
     id: string;
     content: string;
-    created: Date;
+    created: Date | null;
 
     constructor(
         id : string,
